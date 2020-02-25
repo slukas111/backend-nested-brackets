@@ -31,8 +31,15 @@ def is_matched(s):
             if token == brac_types[bracket_maybe][-1]:
                 if opn_bracket[-1] != brac_types[bracket_maybe][0]:
                     answer = "NO " + str(index)
-                    pass
-
+                    #pass
+                    token = s
+                else:
+                    opn_bracket.pop()
+        s = s[len(token):]
+    if len(opn_bracket) > 0:
+        answer = "NO " + str(index)
+    return answer
+    
 def is_nested(line):
     """Validate a single input line for correct nesting"""
     pass
