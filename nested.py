@@ -16,6 +16,14 @@ def is_matched(s):
         "inequalities": ["<", ">"]
     }
 
+    opn_bracket = []
+    index = 0
+    answer = "Yes"
+    while s:
+        index += 1
+        if s[:2] == "(*" or s[:2] == "*)":
+            token = s[:2]
+
 
 def is_nested(line):
     """Validate a single input line for correct nesting"""
