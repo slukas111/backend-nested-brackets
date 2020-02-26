@@ -7,49 +7,81 @@ __author__ = "Sasha Lukas w/ help Chris"
 
 import sys
 
-def is_matched(s):
-    brac_types = {
-        "parasts": ["(*", "*)"],
-        "parens": ["(", ")"],
-        "brackets": ["[", "]"],
-        "curlies": ["{", "}"],
-        "inequalities": ["<", ">"]
-    }
-
-    opn_bracket = []
-    index = 0
-    answer = "Yes"
-    while s:
-        index += 1
-        if s[:2] == "(*" or s[:2] == "*)":
-            token = s[:2]
- else:
-            token = s[0]
-        for bracket_maybe in brac_types:
-            if token == brac_types[bracket_maybe][0]:
-                opn_bracket.append(token)
-            if token == brac_types[bracket_maybe][-1]:
-                if opn_bracket[-1] != brac_types[bracket_maybe][0]:
-                    answer = "NO " + str(index)
-                    #pass
-                    token = s
-                else:
-                    opn_bracket.pop()
-        s = s[len(token):]
-    if len(opn_bracket) > 0:
-        answer = "NO " + str(index)
-    return answer
-    
-def is_nested(line):
-    """Validate a single input line for correct nesting"""
-    pass
-
+if sys.version_info[0] < 3:
+    raise Exception("Need Python 3")
 
 def main(args):
-    """Open the input file and call `is_nested()` for each line"""
-    # Results: print to console and also write to output file
-    pass
+    """Add your code here"""
+    if len(sys.argv) != 2:
+        print 'Please add a filename as a second argument'
+        sys.exit(1)
+    filename = sys.argv[1]
+    print(filename)
+    fileToOpen = open(filename)
+    fileToWrite = open("output.txt", "a")
+    
 
+    # charDict = { --Karen
+    #     "parasts": ["(*", "*)"],
+    #     "parens": ["(", ")"],
+    #     "squares": ["[", "]"],
+    #     "curlies": ["{", "}"],
+    #     "alligators": ["<", ">"]
+    # }
+    charDict={">":"<","]":"[","}":"{","*)":"(*",")":"("} 
+    for line in fileToOpen:
+        if(line.isspace()):
+            break
+
+def is_nested(line):    
+        bracUsed = []
+        #openChar
+        num = 0
+        count=0
+        while(num < len(line)):
+                if line[num] in "(<[{":
+                    if line[num+1] == "*" and line[num]=="(":
+                       bracUsed.append("(*")
+                       num = num + 2
+                       
+                    else:
+                        bracUsed.append(line[num])
+                        num +=1
+                    count +=1
+
+                elif line[num] in ">}]*)":
+                    if line[num]=="*" and line[num+1]==")":
+                        
+                        index = "*)"
+                        num += 2
+                    elif(not line[num] == "*"):
+                        index = line[num]
+                        num +=1
+                    else:
+                        count += 1
+                        num += 1
+                        continue
+                    count += 1    
+                    
+                    if bracUsed[-1] == charDict[bracUsed]:
+
+                        bracUsed.pop(-1)
+                    else:
+                        fileToWrite.write("NO "+str(count)+"\n")
+                        break
+                else:
+                    num += 1
+                    count += 1
+  
+        
+        if(not bracUsed):
+            fileToWrite.write("YES\n")
+        elif(bracUsed and len(line)== count):
+            fileToWrite.write("NO "+str(count)+"\n")
+        
+
+            
+              
 
 if __name__ == '__main__':
-    main(sys.argv[1:])
+    main(sys.argv)
